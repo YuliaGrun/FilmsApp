@@ -1,4 +1,4 @@
-package com.example.filmsapp
+package com.example.filmsapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,5 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         ui = ActivityMainBinding.inflate(layoutInflater)
         setContentView(ui.root)
+        if(savedInstanceState == null)
+            supportFragmentManager.beginTransaction().replace(ui.container.id, MainFragment.newInstance()).commit()
     }
 }
