@@ -3,18 +3,20 @@ package com.example.filmsapp.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.filmsapp.model.RepositoryImpl
 
-class MainViewModel(private val liveData: MutableLiveData<AppState> = MutableLiveData()): ViewModel(){
-
+class MainViewModel(private val liveData: MutableLiveData<AppState> = MutableLiveData(),
+                    private val repositoryImpl: RepositoryImpl = RepositoryImpl()): ViewModel(){
     fun getData(): LiveData<AppState> {
         return liveData
     }
+    fun getFilmsFromSource() = getFilms()
 
-    fun getFilms(){
+    private fun getFilms(){
+        liveData.postValue(AppState.Loading(process = 0))
         Thread{
-            liveData.postValue(AppState.Loading(process = 0))
             Thread.sleep(2000L)
-            liveData.postValue(AppState.Success(Any()))
+            liveData.postValue(AppState.Success(repositoryImpl.getListFilms()))
         }.start()
     }
 }
