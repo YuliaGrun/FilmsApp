@@ -14,3 +14,9 @@ fun getFilms(): List<Film> {
 
     )
 }
+fun getOneFilm(): Film {
+    return (Film("Top Gun: Maverick", 2022, "United States", R.drawable.ic_films))
+
+
+
+}

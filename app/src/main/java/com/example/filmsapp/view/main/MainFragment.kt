@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.filmsapp.databinding.FragmentMainBinding
+import com.example.filmsapp.model.Film
 import com.example.filmsapp.viewmodel.AppState
 import com.example.filmsapp.viewmodel.MainViewModel
 
@@ -39,8 +40,10 @@ class MainFragment : Fragment() {
             }
         }
         viewModel.getData().observe(viewLifecycleOwner,observer)
-        viewModel.getFilms()
+        viewModel.getFilmsFromSource()
     }
+
+
     private val ui get() = _ui!!
 
     override fun onDestroyView() {
@@ -57,7 +60,15 @@ class MainFragment : Fragment() {
             }
             is AppState.Success -> {
                 _ui!!.loadingLayout.visibility = View.GONE
+                val filmData = data.filmsData
+                setData(filmData)
             }
         }
+    }
+
+    private fun setData(film: Film){
+        _ui!!.imageViewFilm.setImageResource(film.pictureId)
+        _ui!!.nameViewFilm.text = film.filmName
+        _ui!!.yearViewFilm.text = film.yearRelease.toString()
     }
 }
