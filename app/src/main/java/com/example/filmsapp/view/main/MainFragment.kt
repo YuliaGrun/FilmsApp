@@ -1,6 +1,7 @@
 package com.example.filmsapp.view.main
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.filmsapp.R
 import com.example.filmsapp.databinding.FragmentMainBinding
 import com.example.filmsapp.model.Film
+import com.example.filmsapp.view.main.film.FilmFragment
 import com.example.filmsapp.viewmodel.AppState
 import com.example.filmsapp.viewmodel.MainViewModel
 
@@ -19,7 +22,15 @@ class MainFragment : Fragment() {
 
     private val adapter = MainFragmentAdapter(object: OnItemViewClickListener{
         override fun onItemViewClick(film: Film) {
-
+            val manager = activity?.supportFragmentManager
+            if(manager != null){
+                val bundle = Bundle()
+                bundle.putParcelable(FilmFragment.BUNDLE_EXTRA, film)
+                manager.beginTransaction()
+                    .add(R.id.container, FilmFragment.newInstance(bundle))
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+            }
         }
     })
 
@@ -28,8 +39,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _ui = FragmentMainBinding.inflate(inflater, container,false)
-        val view = _ui!!.root
-        return view
+        return ui.root
 
     }
 

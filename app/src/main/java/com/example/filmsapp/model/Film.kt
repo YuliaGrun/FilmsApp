@@ -1,8 +1,11 @@
 package com.example.filmsapp.model
 
+import android.os.Parcelable
 import com.example.filmsapp.R
+import kotlinx.android.parcel.Parcelize
 
-data class Film (val filmName: String, val yearRelease: Int, val country: String, val pictureId: Int)
+@Parcelize
+data class Film (val filmName: String, val yearRelease: Int, val country: String, val pictureId: Int):Parcelable
 
 fun getFilms(): List<Film> {
     return listOf(
