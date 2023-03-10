@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.filmsapp.databinding.FragmentMainBinding
@@ -15,6 +16,12 @@ import com.example.filmsapp.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
     private var _ui:FragmentMainBinding? = null
+
+    private val adapter = MainFragmentAdapter(object: OnItemViewClickListener{
+        override fun onItemViewClick(film: Film) {
+
+        }
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +40,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _ui!!.mainFragmentRecyclerView.adapter = adapter
         val viewModel  = ViewModelProvider(this)[MainViewModel::class.java]
         val observer = object : Observer<AppState> {
             override fun onChanged(data: AppState) {
@@ -60,15 +68,12 @@ class MainFragment : Fragment() {
             }
             is AppState.Success -> {
                 _ui!!.loadingLayout.visibility = View.GONE
-                val filmData = data.filmsData
-                setData(filmData)
+                adapter.setFilms( data.filmsData)
             }
         }
     }
 
-    private fun setData(film: Film){
-        _ui!!.imageViewFilm.setImageResource(film.pictureId)
-        _ui!!.nameViewFilm.text = film.filmName
-        _ui!!.yearViewFilm.text = film.yearRelease.toString()
+    interface OnItemViewClickListener {
+        fun onItemViewClick(film: Film)
     }
 }
